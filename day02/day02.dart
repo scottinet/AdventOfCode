@@ -34,7 +34,7 @@ Future<List<InputData>> parse(String filename) async {
 void part1(List<InputData> data) {
   int result = 0;
 
-  for (InputData d in data) {
+  for (var d in data) {
     var faceAreas = [
       d.length * d.width,
       d.width * d.height,
@@ -48,6 +48,17 @@ void part1(List<InputData> data) {
   print('Part 1: $result');
 }
 
+void part2(List<InputData> data) {
+  int result = 0;
+
+  for (var d in data) {
+    var dims = [d.length, d.width, d.height]..sort(((a, b) => a - b));
+    result += 2 * dims[0] + 2 * dims[1] + d.length * d.width * d.height;
+  }
+
+  print('Part 2: $result');
+}
+
 void main(List<String> args) async {
   final stopwatch = Stopwatch()..start();
 
@@ -58,7 +69,9 @@ void main(List<String> args) async {
 
   print(Directory.current.path);
   List<InputData> inputData = await parse(args[0]);
+
   part1(inputData);
+  part2(inputData);
 
   stopwatch.stop();
   print('Elapsed time: ${stopwatch.elapsed.inMilliseconds}ms');
