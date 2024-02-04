@@ -28,3 +28,6 @@ doc/api/
 
 # AOC input data
 data/
+
+# Executables
+*.exe
