@@ -5,9 +5,12 @@ import 'day01/day01.dart';
 import 'day02/day02.dart';
 import 'package:aoc2015/models/runnable.model.dart';
 
+import 'day03/day03.dart';
+
 Map<String, Runnable> dayRunners = {
   'day01': Day01(),
   'day02': Day02(),
+  'day03': Day03(),
 };
 
 void main(List<String> args) async {
