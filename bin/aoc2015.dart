@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'day01/day01.dart';
 import 'day02/day02.dart';
-import 'models/runnable.model.dart';
+import 'package:aoc2015/models/runnable.model.dart';
 
 Map<String, Runnable> dayRunners = {
   'day01': Day01(),
