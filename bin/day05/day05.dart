@@ -31,5 +31,16 @@ class Day05 extends Runnable {
   }
 
   @override
-  FutureOr<void> part2() {}
+  void part2() {
+    int niceCount = 0;
+
+    for (final word in input) {
+      bool isNice = RegExp(r'(.).\1').hasMatch(word) &&
+          RegExp(r'(..).*\1').hasMatch(word);
+
+      if (isNice) niceCount++;
+    }
+
+    print('Nices: $niceCount');
+  }
 }
