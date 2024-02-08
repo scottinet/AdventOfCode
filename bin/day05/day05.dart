@@ -15,32 +15,19 @@ class Day05 extends Runnable {
   @override
   void part1() {
     const naughtyIndicators = ['ab', 'cd', 'pq', 'xy'];
-    int niceCount = 0;
+    var nice = input.where((word) =>
+        RegExp(r'[aeiou]').allMatches(word).length >= 3 &&
+        RegExp(r'(.)\1').hasMatch(word) &&
+        !naughtyIndicators.any((indicator) => word.contains(indicator)));
 
-    for (final word in input) {
-      bool isNice = RegExp(r'[aeiou]').allMatches(word).length >= 3 &&
-          RegExp(r'(.)\1').hasMatch(word) &&
-          !naughtyIndicators.any((indicator) => word.contains(indicator));
-
-      if (isNice) {
-        niceCount++;
-      }
-    }
-
-    print('Nices: $niceCount');
+    print('Nices: ${nice.length}');
   }
 
   @override
   void part2() {
-    int niceCount = 0;
+    var nice = input.where((word) =>
+        RegExp(r'(.).\1').hasMatch(word) && RegExp(r'(..).*\1').hasMatch(word));
 
-    for (final word in input) {
-      bool isNice = RegExp(r'(.).\1').hasMatch(word) &&
-          RegExp(r'(..).*\1').hasMatch(word);
-
-      if (isNice) niceCount++;
-    }
-
-    print('Nices: $niceCount');
+    print('Nices: ${nice.length}');
   }
 }
