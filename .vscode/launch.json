@@ -8,9 +8,9 @@
       "name": "Dart & Flutter",
       "request": "launch",
       "type": "dart",
-      "program": "day02.dart",
-      "args": ["data/example.txt"],
-      "cwd": "day02"
+      "program": "aoc2015.dart",
+      "cwd": "bin",
+      "args": ["day06", "example"]
     }
   ]
 }
