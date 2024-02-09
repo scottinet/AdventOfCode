@@ -57,5 +57,28 @@ class Day06 extends Runnable {
   }
 
   @override
-  void part2() {}
+  void part2() {
+    Map<Point, num> bulbs = {};
+
+    for (final action in actions) {
+      num adjustBy = action.type == 'turn on'
+          ? 1
+          : action.type == 'turn off'
+              ? -1
+              : 2;
+
+      for (num y = action.start.y; y <= action.end.y; y++) {
+        for (num x = action.start.x; x <= action.end.x; x++) {
+          var p = Point(x, y);
+          var bulb = bulbs[p] ?? 0;
+
+          bulb = max(bulb + adjustBy, 0);
+
+          bulbs[p] = bulb;
+        }
+      }
+    }
+
+    print('Brightness: ${bulbs.values.reduce((a, b) => a + b)}');
+  }
 }
