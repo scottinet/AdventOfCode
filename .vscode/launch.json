@@ -10,7 +10,7 @@
       "type": "dart",
       "program": "bin/aoc2015.dart",
       // "cwd": "bin",
-      "args": ["day07", "input"]
+      "args": ["day08", "example"]
     }
   ]
 }
