@@ -7,6 +7,7 @@ import 'operation.dart';
 
 class Day07 extends Runnable {
   Map<String, Operation> dict = {};
+  int? a;
 
   @override
   Future<void> init(Stream<String> input,
@@ -48,20 +49,7 @@ class Day07 extends Runnable {
     }
   }
 
-  @override
-  void part1() {
-    final Map<String, int> computed = {};
-
-    for (final entry in dict.entries) {
-      if (entry.value.op == 'NOOP') {
-        final res = int.tryParse(entry.value.lhs);
-
-        if (res != null) {
-          computed[entry.key] = res;
-        }
-      }
-    }
-
+  int _findA(Map<String, int> computed) {
     final queue = dict.keys.toSet()..removeWhere((k) => computed[k] != null);
 
     while (queue.isNotEmpty && !computed.containsKey('a')) {
@@ -84,9 +72,45 @@ class Day07 extends Runnable {
       }
     }
 
-    print('A: ${computed['a']}');
+    return computed['a']!;
   }
 
   @override
-  void part2() {}
+  void part1() {
+    final Map<String, int> computed = {};
+
+    for (final entry in dict.entries) {
+      if (entry.value.op == 'NOOP') {
+        final res = int.tryParse(entry.value.lhs);
+
+        if (res != null) {
+          computed[entry.key] = res;
+        }
+      }
+    }
+
+    a = _findA(computed);
+    print('A: $a');
+  }
+
+  @override
+  void part2() {
+    final Map<String, int> computed = {};
+
+    for (final entry in dict.entries) {
+      if (entry.value.op == 'NOOP') {
+        if (entry.key == 'b') {
+          computed[entry.key] = a!;
+        } else {
+          final res = int.tryParse(entry.value.lhs);
+
+          if (res != null) {
+            computed[entry.key] = res;
+          }
+        }
+      }
+    }
+
+    print('A: ${_findA(computed)}');
+  }
 }
