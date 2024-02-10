@@ -8,6 +8,7 @@ import 'day03/day03.dart';
 import 'day04/day04.dart';
 import 'day05/day05.dart';
 import 'day06/day06.dart';
+import 'day07/day07.dart';
 
 Map<String, Runnable> dayRunners = {
   'day01': Day01(),
@@ -16,6 +17,7 @@ Map<String, Runnable> dayRunners = {
   'day04': Day04(),
   'day05': Day05(),
   'day06': Day06(),
+  'day07': Day07(),
 };
 
 void main(List<String> args) async {
@@ -32,7 +34,7 @@ void main(List<String> args) async {
   }
 
   final input =
-      File('data/${args[0]}/${args[1]}').openRead().transform(utf8.decoder);
+      File('bin/${args[0]}/data/${args[1]}').openRead().transform(utf8.decoder);
 
   await runnable.init(input);
 
