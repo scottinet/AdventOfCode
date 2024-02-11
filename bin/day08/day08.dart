@@ -44,5 +44,13 @@ class Day08 extends Runnable {
   }
 
   @override
-  void part2() {}
+  void part2() {
+    int escaped = 0;
+
+    for (final line in lines) {
+      escaped += 2 + line.split('').where((c) => c == '\\' || c == '"').length;
+    }
+
+    print('Added escape characters: $escaped');
+  }
 }
