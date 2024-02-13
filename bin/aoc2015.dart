@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:aoc2015/models/runnable.model.dart';
+import 'package:aoc2015/runnable.dart';
 import 'day01/day01.dart';
 import 'day02/day02.dart';
 import 'day03/day03.dart';
@@ -10,6 +10,7 @@ import 'day05/day05.dart';
 import 'day06/day06.dart';
 import 'day07/day07.dart';
 import 'day08/day08.dart';
+import 'day09/day09.dart';
 
 Map<String, Runnable> dayRunners = {
   'day01': Day01(),
@@ -20,6 +21,7 @@ Map<String, Runnable> dayRunners = {
   'day06': Day06(),
   'day07': Day07(),
   'day08': Day08(),
+  'day09': Day09(),
 };
 
 void main(List<String> args) async {

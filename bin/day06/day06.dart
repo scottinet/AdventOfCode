@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 
-import 'package:aoc2015/models/runnable.model.dart';
+import 'package:aoc2015/runnable.dart';
 
 import 'action.model.dart';
 

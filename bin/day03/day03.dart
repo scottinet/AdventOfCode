@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 // import 'package:aoc2015/models/point.model.dart';
-import 'package:aoc2015/models/runnable.model.dart';
+import 'package:aoc2015/runnable.dart';
 
 class Day03 extends Runnable {
   String _content = '';

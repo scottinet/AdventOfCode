@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:aoc2015/models/runnable.model.dart';
+import 'package:aoc2015/runnable.dart';
 
 class Day01 extends Runnable {
   int floor = 0;
