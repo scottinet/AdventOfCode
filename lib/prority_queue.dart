@@ -14,6 +14,7 @@ class PriorityQueueNode {
 }
 
 /// Fibonacci Heap
+/// See https://www.cs.princeton.edu/~wayne/cs423/fibonacci/FibonacciHeapAlgorithm.html
 class PriorityQueue {
   PriorityQueueNode? _min;
   final DoubleLinkedQueue<PriorityQueueNode> _rooted = DoubleLinkedQueue();
