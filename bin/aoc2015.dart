@@ -12,6 +12,7 @@ import '2015/day07/day07.dart';
 import '2015/day08/day08.dart';
 import '2015/day09/day09.dart';
 import '2015/day10/day10.dart';
+import '2015/day11/day11.dart';
 
 Map<String, Runnable> dayRunners = {
   'day01': Y2015Day01(),
@@ -24,6 +25,7 @@ Map<String, Runnable> dayRunners = {
   'day08': Y2015Day08(),
   'day09': Y2015Day09(),
   'day10': Y2015Day10(),
+  'day11': Y2015Day11(),
 };
 
 void main(List<String> args) async {
