@@ -1,23 +1,23 @@
 import 'dart:collection';
 
-import 'package:collection/collection.dart';
-
 const precision = 10e-6;
 
-class PriorityQueueNode {
+class PriorityQueueNode<T> {
   double value;
   bool marked = false;
   PriorityQueueNode? parent;
   DoubleLinkedQueue<PriorityQueueNode> children = DoubleLinkedQueue();
+  T data;
 
-  PriorityQueueNode(this.value);
+  PriorityQueueNode(this.value, this.data);
 }
 
 /// Fibonacci Heap
 /// See https://www.cs.princeton.edu/~wayne/cs423/fibonacci/FibonacciHeapAlgorithm.html
-class PriorityQueue {
+class PriorityQueue<T> {
   PriorityQueueNode? _min;
   final DoubleLinkedQueue<PriorityQueueNode> _rooted = DoubleLinkedQueue();
+  final _byData = <T, PriorityQueueNode<T>>{};
   int _size = 0;
   int _marked = 0;
 
@@ -26,11 +26,18 @@ class PriorityQueue {
   int get potential => _rooted.length + 2 * _marked;
   int get size => _size;
   double? get min => _min?.value;
+  bool get isEmpty => _min == null;
+  bool get isNotEmpty => _min != null;
 
-  PriorityQueue add(double value) {
-    var node = PriorityQueueNode(value);
+  PriorityQueue add(T data, double value) {
+    if (_byData[data] != null) {
+      throw Exception('Cannot add node: data already exists');
+    }
+
+    var node = PriorityQueueNode(value, data);
 
     _rooted.add(node);
+    _byData[data] = node;
 
     if (_min == null || node.value < _min!.value) {
       _min = node;
@@ -41,17 +48,14 @@ class PriorityQueue {
     return this;
   }
 
-  void remove(int value) {
-    final node = _findNode(value, _rooted);
-
-    if (node != null) {
-      _decreaseKey(node, double.negativeInfinity);
-      removeFirst();
-    }
+  void remove(T data) {
+    decreasePriority(data, double.negativeInfinity);
+    removeFirst();
   }
 
-  PriorityQueue merge(PriorityQueue other) {
+  PriorityQueue merge(PriorityQueue<T> other) {
     _rooted.addAll(other._rooted);
+    _byData.addAll(other._byData);
 
     if (_min == null || other._min != null && other._min!.value < _min!.value) {
       _min = other._min;
@@ -62,21 +66,24 @@ class PriorityQueue {
     return this;
   }
 
-  double? removeFirst() {
-    if (_min == null) return null;
+  (T, double) removeFirst() {
+    if (_min == null) {
+      throw Exception('Nothing to remove');
+    }
 
     final min = _min;
     _rooted.remove(min);
+    _byData.remove(min!.data);
     _size--;
 
-    for (final child in min!.children) {
+    for (final child in min.children) {
       child.parent = null;
       _rooted.add(child);
     }
 
     _consolidate();
 
-    return min.value;
+    return (min.data, min.value);
   }
 
   void _link(PriorityQueueNode parent, PriorityQueueNode child) {
@@ -150,7 +157,13 @@ class PriorityQueue {
     }
   }
 
-  void _decreaseKey(PriorityQueueNode node, double newValue) {
+  void decreasePriority(T data, double newValue) {
+    final node = _byData[data];
+
+    if (node == null) {
+      throw Exception('Cannot decrease priority of unknown node');
+    }
+
     if (node.value <= newValue) {
       throw Exception(
           'Cannot decrease key: source value (${node.value}) is inferior to the target value ($newValue)');
@@ -167,22 +180,5 @@ class PriorityQueue {
     if (_min == null || node.value < _min!.value) {
       _min = node;
     }
-  }
-
-  PriorityQueueNode? _findNode(
-      int value, DoubleLinkedQueue<PriorityQueueNode> nodes) {
-    final candidates = nodes.where((e) => e.value <= value);
-    final match =
-        candidates.firstWhereOrNull((e) => (e.value - value).abs() < precision);
-
-    if (match != null) return match;
-
-    for (final node in candidates) {
-      final found = _findNode(value, node.children);
-
-      if (found != null) return found;
-    }
-
-    return null;
   }
 }

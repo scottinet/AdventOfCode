@@ -9,8 +9,7 @@
       "request": "launch",
       "type": "dart",
       "program": "bin/aoc2015.dart",
-      // "cwd": "bin",
-      "args": ["day08", "example"]
+      "args": ["day09", "input"]
     }
   ]
 }
