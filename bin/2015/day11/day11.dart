@@ -4,6 +4,7 @@ import 'package:aoc2015/runnable.dart';
 
 class Y2015Day11 implements Runnable {
   String _currentPassword = "";
+  String _nextPassword = "";
   final _forbiddenChars = "iol".codeUnits;
   final _a = "a".codeUnitAt(0);
   final _z = "z".codeUnitAt(0);
@@ -22,11 +23,20 @@ class Y2015Day11 implements Runnable {
       increasePassword(pwd);
     } while (!isPasswordValid(pwd));
 
-    print("Next password: ${String.fromCharCodes(pwd)}");
+    _nextPassword = String.fromCharCodes(pwd);
+    print("Next password: $_nextPassword");
   }
 
   @override
-  FutureOr<void> part2() {}
+  FutureOr<void> part2() {
+    List<int> pwd = List.from(_nextPassword.codeUnits);
+
+    do {
+      increasePassword(pwd);
+    } while (!isPasswordValid(pwd));
+
+    print("Next (next) password: ${String.fromCharCodes(pwd)}");
+  }
 
   void increasePassword(List<int> pwd) {
     final idx = pwd.lastIndexWhere((c) => c != _z);
