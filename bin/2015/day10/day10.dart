@@ -2,9 +2,6 @@ import 'dart:async';
 
 import 'package:aoc2015/runnable.dart';
 
-const kConwayConstant =
-    1.30357726903429639125709911215255189073070250465940487575486139062855;
-
 class Y2015Day10 extends Runnable {
   final groupRxp = RegExp(r'(.)\1*');
   String content = "";
