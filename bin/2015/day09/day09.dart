@@ -6,7 +6,7 @@ import 'package:aoc2015/graphs/weighted_graph_node.dart';
 import 'package:aoc2015/runnable.dart';
 import 'package:trotter/trotter.dart';
 
-class Day09 extends Runnable {
+class Y2015Day09 extends Runnable {
   final Map<String, WeightedGraphNode<String>> nodes = {};
 
   @override

@@ -5,7 +5,7 @@ import 'package:aoc2015/runnable.dart';
 
 import 'operation.dart';
 
-class Day07 extends Runnable {
+class Y2015Day07 extends Runnable {
   Map<String, Operation> dict = {};
   int? a;
 

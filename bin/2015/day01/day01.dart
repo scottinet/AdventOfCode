@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:aoc2015/runnable.dart';
 
-class Day01 extends Runnable {
+class Y2015Day01 extends Runnable {
   int floor = 0;
   int basementEnteredAt = -1;
 

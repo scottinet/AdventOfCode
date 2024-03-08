@@ -4,7 +4,7 @@ import 'dart:math';
 // import 'package:aoc2015/models/point.model.dart';
 import 'package:aoc2015/runnable.dart';
 
-class Day03 extends Runnable {
+class Y2015Day03 extends Runnable {
   String _content = '';
 
   @override

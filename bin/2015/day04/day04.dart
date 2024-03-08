@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:aoc2015/runnable.dart';
 import 'package:crypto/crypto.dart';
 
-class Day04 extends Runnable {
+class Y2015Day04 extends Runnable {
   String _md5prefix = '';
 
   @override

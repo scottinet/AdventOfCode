@@ -3,7 +3,7 @@ import 'dart:convert';
 
 import 'package:aoc2015/runnable.dart';
 
-class Day05 extends Runnable {
+class Y2015Day05 extends Runnable {
   List<String> input = [];
 
   @override

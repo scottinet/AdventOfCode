@@ -12,10 +12,10 @@ class InputData {
   InputData(this.length, this.width, this.height);
 }
 
-class Day02 extends Runnable {
+class Y2015Day02 extends Runnable {
   final List<InputData> _data;
 
-  Day02() : _data = [];
+  Y2015Day02() : _data = [];
 
   @override
   Future<void> init(Stream<String> input,

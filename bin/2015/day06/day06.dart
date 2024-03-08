@@ -6,7 +6,7 @@ import 'package:aoc2015/runnable.dart';
 
 import 'action.model.dart';
 
-class Day06 extends Runnable {
+class Y2015Day06 extends Runnable {
   final List<Action> actions = [];
 
   @override

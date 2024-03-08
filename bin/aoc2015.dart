@@ -2,26 +2,26 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:aoc2015/runnable.dart';
-import 'day01/day01.dart';
-import 'day02/day02.dart';
-import 'day03/day03.dart';
-import 'day04/day04.dart';
-import 'day05/day05.dart';
-import 'day06/day06.dart';
-import 'day07/day07.dart';
-import 'day08/day08.dart';
-import 'day09/day09.dart';
+import '2015/day01/day01.dart';
+import '2015/day02/day02.dart';
+import '2015/day03/day03.dart';
+import '2015/day04/day04.dart';
+import '2015/day05/day05.dart';
+import '2015/day06/day06.dart';
+import '2015/day07/day07.dart';
+import '2015/day08/day08.dart';
+import '2015/day09/day09.dart';
 
 Map<String, Runnable> dayRunners = {
-  'day01': Day01(),
-  'day02': Day02(),
-  'day03': Day03(),
-  'day04': Day04(),
-  'day05': Day05(),
-  'day06': Day06(),
-  'day07': Day07(),
-  'day08': Day08(),
-  'day09': Day09(),
+  'day01': Y2015Day01(),
+  'day02': Y2015Day02(),
+  'day03': Y2015Day03(),
+  'day04': Y2015Day04(),
+  'day05': Y2015Day05(),
+  'day06': Y2015Day06(),
+  'day07': Y2015Day07(),
+  'day08': Y2015Day08(),
+  'day09': Y2015Day09(),
 };
 
 void main(List<String> args) async {
@@ -37,8 +37,9 @@ void main(List<String> args) async {
     exit(1);
   }
 
-  final input =
-      File('bin/${args[0]}/data/${args[1]}').openRead().transform(utf8.decoder);
+  final input = File('bin/2015/${args[0]}/data/${args[1]}')
+      .openRead()
+      .transform(utf8.decoder);
 
   await runnable.init(input);
 
