@@ -2,7 +2,11 @@ import 'dart:async';
 
 import 'package:aoc2015/runnable.dart';
 
+const kConwayConstant =
+    1.30357726903429639125709911215255189073070250465940487575486139062855;
+
 class Y2015Day10 extends Runnable {
+  final groupRxp = RegExp(r'(.)\1*');
   String content = "";
 
   @override
@@ -11,30 +15,36 @@ class Y2015Day10 extends Runnable {
     content = await input.join();
   }
 
+  String lookAndSay(String buf) {
+    String result = "";
+    final matches = groupRxp.allMatches(buf);
+
+    result = matches
+        .map((match) => "${match.end - match.start}${buf[match.start]}")
+        .join();
+
+    return result;
+  }
+
   @override
   void part1() {
     String buf = content;
-    String next = "";
 
     for (int i = 0; i < 40; i++) {
-      int count = 0;
-
-      for (int c = 0; c < buf.length; c++) {
-        if (c == buf.length - 1 || buf[c] != buf[c + 1]) {
-          next += (count + 1).toString() + buf[c];
-          count = 0;
-        } else {
-          count++;
-        }
-      }
-
-      buf = next;
-      next = "";
+      buf = lookAndSay(buf);
     }
 
     print("Result: ${buf.length}");
   }
 
   @override
-  void part2() {}
+  void part2() {
+    String buf = content;
+
+    for (int i = 0; i < 50; i++) {
+      buf = lookAndSay(buf);
+    }
+
+    print("Result: ${buf.length}");
+  }
 }
