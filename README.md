@@ -1,3 +1,3 @@
 # Description
 
-Just me playing the [Advent of Code (2015)](https://adventofcode.com/2015)
+Just me playing the [Advent of Code (2015)](https://adventofcode.com)
