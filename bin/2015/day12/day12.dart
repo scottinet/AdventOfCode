@@ -13,28 +13,18 @@ class Y2015Day12 implements Runnable {
     json = jsonDecode(raw);
   }
 
-  num parseVal(dynamic v) {
-    if (v is Map) return reduceMap(v);
+  num reduce(dynamic v) {
     if (v is num) return v;
     if (v is String) return num.tryParse(v) ?? 0;
-    if (v is List) return v.fold(0, (agg, value) => agg + parseVal(value));
+    if (v is List) return v.fold(0, (agg, value) => agg + reduce(value));
+    if (v is Map) return reduce(v.values.toList());
 
     return 0;
   }
 
-  num reduceMap(Map obj) {
-    num val = 0;
-
-    for (final v in obj.values) {
-      val += parseVal(v);
-    }
-
-    return val;
-  }
-
   @override
   FutureOr<void> part1() {
-    final reduced = reduceMap(json);
+    final reduced = reduce(json);
 
     print('Reduced: $reduced');
   }
