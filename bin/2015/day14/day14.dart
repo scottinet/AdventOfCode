@@ -27,6 +27,14 @@ class Y2015Day14 implements Runnable {
     }
   }
 
+  int getDistanceTravelled(Reindeer reindeer, int elapsed) {
+    final cycleTime = reindeer.flyTime + reindeer.restTime;
+    final remainder = elapsed.remainder(cycleTime);
+
+    return (reindeer.velocity * reindeer.flyTime) * (elapsed ~/ cycleTime) +
+        reindeer.velocity * min(reindeer.flyTime, remainder);
+  }
+
   @override
   FutureOr<void> part1() {
     var maxDistance = 0;
@@ -34,17 +42,31 @@ class Y2015Day14 implements Runnable {
 
     for (var i = 0; i < reindeers.length; i++) {
       final r = reindeers[i];
-      final cycleTime = r.flyTime + r.restTime;
-      final remainder = totalTime.remainder(cycleTime);
-      int distance = (r.velocity * r.flyTime) * (totalTime ~/ cycleTime) +
-          r.velocity * min(r.flyTime, remainder);
-
-      maxDistance = max(maxDistance, distance);
+      maxDistance = max(maxDistance, getDistanceTravelled(r, totalTime));
     }
 
     print("Max distance travelled: $maxDistance");
   }
 
   @override
-  FutureOr<void> part2() {}
+  FutureOr<void> part2() {
+    const totalTime = 2503;
+    final points = List<int>.filled(reindeers.length, 0, growable: false);
+
+    for (int elapsed = 0; elapsed < totalTime; elapsed++) {
+      final travelled =
+          reindeers.map((r) => getDistanceTravelled(r, elapsed + 1)).toList();
+      final maxDistance = travelled.reduce((agg, val) => max(agg, val));
+
+      for (int i = 0; i < travelled.length; i++) {
+        if (travelled[i] == maxDistance) {
+          points[i]++;
+        }
+      }
+    }
+
+    final maxPoints = points.reduce((agg, val) => max(agg, val));
+
+    print("Maximum points: $maxPoints");
+  }
 }
