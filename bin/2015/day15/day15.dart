@@ -30,10 +30,21 @@ class Y2015Day15 implements Runnable {
   }
 
   @override
-  FutureOr<void> part2() {}
+  FutureOr<void> part2() {
+    final best = _findBestMix(_ingredients, 100, wantedCalories: 500);
+
+    print('Recipe: ');
+
+    for (final MapEntry(key: ingredient, value: qty) in best.mix.entries) {
+      print(
+          '\t- $qty teaspoon${qty > 1 ? 's' : ''} of ${ingredient.name.toLowerCase()}');
+    }
+
+    print('Score: ${best.score}');
+  }
 
   MixedIngredients _findBestMix(List<Ingredient> ingredients, int quantity,
-      [Map<Ingredient, int>? currentMix]) {
+      {Map<Ingredient, int>? currentMix, int? wantedCalories}) {
     var bestMix = MixedIngredients(mix: {});
 
     if (ingredients.isEmpty || quantity == 0) return bestMix;
@@ -45,9 +56,13 @@ class Y2015Day15 implements Runnable {
       Map<Ingredient, int> current = {first: quantity - i};
 
       if (currentMix != null) current.addAll(currentMix);
-      current.addAll(_findBestMix(remaining, i, current).mix);
+      final foundMix = _findBestMix(remaining, i,
+          currentMix: current, wantedCalories: wantedCalories);
 
-      final mix = MixedIngredients(mix: current);
+      current.addAll(foundMix.mix);
+
+      final mix =
+          MixedIngredients(mix: current, wantedCalories: wantedCalories);
       if (bestMix.score < mix.score) bestMix = mix;
     }
 
