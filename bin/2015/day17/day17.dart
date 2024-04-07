@@ -20,10 +20,10 @@ class Y2015Day17 implements Runnable {
     final indexes = List<int>.generate(containers.length, (i) => i);
     final subsets = Subsets(indexes);
 
-    print('${subsets.length} subsets');
     for (final subset in subsets()) {
-      if (subset.fold(0, (value, element) => value + containers[element]) ==
-          150) {
+      final sum = subset.fold(0, (agg, val) => agg + containers[val]);
+
+      if (sum == 150) {
         matches++;
       }
     }
@@ -32,5 +32,26 @@ class Y2015Day17 implements Runnable {
   }
 
   @override
-  FutureOr<void> part2() {}
+  FutureOr<void> part2() {
+    int matches = 0;
+    int containersCount = containers.length;
+    final indexes = List<int>.generate(containers.length, (i) => i);
+    final subsets = Subsets(indexes);
+
+    for (final subset in subsets()) {
+      if (subset.length > containersCount) continue;
+      final sum = subset.fold(0, (agg, val) => agg + containers[val]);
+
+      if (sum == 150) {
+        if (subset.length == containersCount) {
+          matches++;
+        } else {
+          matches = 1;
+          containersCount = subset.length;
+        }
+      }
+    }
+
+    print('There are $matches combinations of $containersCount containers');
+  }
 }
