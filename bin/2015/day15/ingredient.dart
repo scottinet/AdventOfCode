@@ -1,7 +1,5 @@
 import 'dart:math';
 
-import 'package:collection/collection.dart';
-
 final _ingredientParseRxp = RegExp(
     r'(\w+): capacity ([-\d]+), durability ([-\d]+), flavor ([-\d]+), texture ([-\d]+), calories ([-\d]+)');
 
@@ -38,10 +36,9 @@ class Ingredient {
 
 class MixedIngredients {
   final Map<Ingredient, int> mix;
-  final MapEquality<Ingredient, int> _comparator;
   int? _cookedResult;
 
-  MixedIngredients({required this.mix}) : _comparator = MapEquality();
+  MixedIngredients({required this.mix});
 
   int get score {
     if (_cookedResult != null) return _cookedResult!;
