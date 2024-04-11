@@ -31,6 +31,24 @@ class Y2015Day18 implements Runnable {
     }
   }
 
+  int getNextLightValue(
+      Map<String, GridPoint<int>> lights, GridPoint<int> light) {
+    final litNeighbours = light.neighbours
+        .map((n) => lights[n.toString()])
+        .whereNotNull()
+        .where((l) => l.value == 1)
+        .length;
+    int nval = light.value;
+
+    if (nval == 1 && litNeighbours != 2 && litNeighbours != 3) {
+      nval = 0;
+    } else if (nval == 0 && litNeighbours == 3) {
+      nval = 1;
+    }
+
+    return nval;
+  }
+
   @override
   FutureOr<void> part1() {
     final steps = 100;
@@ -42,21 +60,11 @@ class Y2015Day18 implements Runnable {
       Map<String, GridPoint<int>> l2 = {};
 
       for (final light in lights.values) {
-        final litNeighbours = light.neighbours
-            .map((n) => lights[n.toString()])
-            .whereNotNull()
-            .where((l) => l.value == 1)
-            .length;
-        int nval = light.value;
-
-        if (nval == 1 && litNeighbours != 2 && litNeighbours != 3) {
-          nval = 0;
-        } else if (nval == 0 && litNeighbours == 3) {
-          nval = 1;
-        }
-
         final lnew = GridPoint<int>(
-            x: light.x, y: light.y, value: nval, neighbours: light.neighbours);
+            x: light.x,
+            y: light.y,
+            value: getNextLightValue(lights, light),
+            neighbours: light.neighbours);
         l2[lnew.toString()] = lnew;
       }
 
@@ -87,24 +95,14 @@ class Y2015Day18 implements Runnable {
         if ((light.x == 0 || light.x == xmax) &&
             (light.y == 0 || light.y == ymax)) {
           l2[light.toString()] = light;
-          continue;
+        } else {
+          final lnew = GridPoint<int>(
+              x: light.x,
+              y: light.y,
+              value: getNextLightValue(lights, light),
+              neighbours: light.neighbours);
+          l2[lnew.toString()] = lnew;
         }
-        final litNeighbours = light.neighbours
-            .map((n) => lights[n.toString()])
-            .whereNotNull()
-            .where((l) => l.value == 1)
-            .length;
-        int nval = light.value;
-
-        if (nval == 1 && litNeighbours != 2 && litNeighbours != 3) {
-          nval = 0;
-        } else if (nval == 0 && litNeighbours == 3) {
-          nval = 1;
-        }
-
-        final lnew = GridPoint<int>(
-            x: light.x, y: light.y, value: nval, neighbours: light.neighbours);
-        l2[lnew.toString()] = lnew;
       }
 
       lights = l2;
