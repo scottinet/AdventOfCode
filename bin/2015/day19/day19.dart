@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:async';
 import 'package:aoc2015/runnable.dart';
-import 'package:collection/collection.dart';
 
 class Y2015Day19 implements Runnable {
   String _molecule = '';
