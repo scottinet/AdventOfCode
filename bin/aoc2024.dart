@@ -2,12 +2,15 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:advent_of_code/runnable.dart';
+import '2024/day01/day01.dart';
 
-Map<String, Runnable> dayRunners = {};
+Map<String, Runnable> dayRunners = {
+  'day01': Y2024Day01(),
+};
 
 void main(List<String> args) async {
   if (args.length < 2) {
-    print('Usage: dart aoc2015.dart <day> <input file>');
+    print('Usage: dart aoc2024.dart <day> <input file>');
     exit(1);
   }
 
@@ -18,7 +21,7 @@ void main(List<String> args) async {
     exit(1);
   }
 
-  final input = File('bin/2015/${args[0]}/data/${args[1]}')
+  final input = File('bin/2024/${args[0]}/data/${args[1]}')
       .openRead()
       .transform(utf8.decoder);
 
