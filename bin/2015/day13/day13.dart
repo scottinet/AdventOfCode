@@ -2,9 +2,9 @@ import 'dart:async';
 import 'dart:collection';
 import 'dart:convert';
 
-import 'package:aoc2015/graphs/travelling_salesman.dart';
-import 'package:aoc2015/graphs/weighted_graph_node.dart';
-import 'package:aoc2015/runnable.dart';
+import 'package:advent_of_code/graphs/travelling_salesman.dart';
+import 'package:advent_of_code/graphs/weighted_graph_node.dart';
+import 'package:advent_of_code/runnable.dart';
 
 class Y2015Day13 implements Runnable {
   final Map<String, WeightedGraphNode<String>> nodes = {};

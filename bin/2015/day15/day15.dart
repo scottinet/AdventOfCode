@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:aoc2015/runnable.dart';
+import 'package:advent_of_code/runnable.dart';
 import 'package:collection/collection.dart';
 import './ingredient.dart';
 

@@ -1,4 +1,4 @@
-import 'package:aoc2015/prority_queue.dart';
+import 'package:advent_of_code/prority_queue.dart';
 import 'package:test/test.dart';
 
 void main() {

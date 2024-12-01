@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:aoc2015/runnable.dart';
+import 'package:advent_of_code/runnable.dart';
 import 'package:crypto/crypto.dart';
 
 class Y2015Day04 extends Runnable {

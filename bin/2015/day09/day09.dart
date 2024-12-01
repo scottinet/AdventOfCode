@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 
-import 'package:aoc2015/graphs/weighted_graph_node.dart';
-import 'package:aoc2015/runnable.dart';
+import 'package:advent_of_code/graphs/weighted_graph_node.dart';
+import 'package:advent_of_code/runnable.dart';
 import 'package:trotter/trotter.dart';
 
 class Y2015Day09 extends Runnable {

@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 
-import 'package:aoc2015/runnable.dart';
+import 'package:advent_of_code/runnable.dart';
 
 class InputData {
   final int length;

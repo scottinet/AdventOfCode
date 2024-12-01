@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:aoc2015/runnable.dart';
+import 'package:advent_of_code/runnable.dart';
 
 class Y2015Day11 implements Runnable {
   String _currentPassword = "";

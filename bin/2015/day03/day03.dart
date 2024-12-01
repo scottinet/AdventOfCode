@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:math';
 
-// import 'package:aoc2015/models/point.model.dart';
-import 'package:aoc2015/runnable.dart';
+// import 'package:advent_of_code/models/point.model.dart';
+import 'package:advent_of_code/runnable.dart';
 
 class Y2015Day03 extends Runnable {
   String _content = '';

@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:aoc2015/runnable.dart';
+import 'package:advent_of_code/runnable.dart';
 import '2015/day01/day01.dart';
 import '2015/day02/day02.dart';
 import '2015/day03/day03.dart';

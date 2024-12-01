@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:aoc2015/runnable.dart';
+import 'package:advent_of_code/runnable.dart';
 import 'aunt_sue.dart';
 
 class Y2015Day16 implements Runnable {

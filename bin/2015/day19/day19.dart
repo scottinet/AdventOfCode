@@ -1,7 +1,7 @@
 import 'dart:collection';
 import 'dart:convert';
 import 'dart:async';
-import 'package:aoc2015/runnable.dart';
+import 'package:advent_of_code/runnable.dart';
 import 'molecule_step.dart';
 
 class Y2015Day19 implements Runnable {

@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:async';
 import 'dart:math';
-import 'package:aoc2015/grid_point.dart';
-import 'package:aoc2015/runnable.dart';
+import 'package:advent_of_code/grid_point.dart';
+import 'package:advent_of_code/runnable.dart';
 import 'package:collection/collection.dart';
 
 class Y2015Day18 implements Runnable {

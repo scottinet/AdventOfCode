@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:aoc2015/runnable.dart';
+import 'package:advent_of_code/runnable.dart';
 
 class Y2015Day12 implements Runnable {
   Map<String, dynamic> json = {};
