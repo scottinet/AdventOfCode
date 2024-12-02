@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:advent_of_code/runnable.dart';
-import '2024/day01/day01.dart';
+import 'bin/2024/day01/day01.dart';
 
 Map<String, Runnable> dayRunners = {
   'day01': Y2024Day01(),
