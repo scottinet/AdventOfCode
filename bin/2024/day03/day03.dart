@@ -26,22 +26,19 @@ class Y2024Day03 extends Runnable {
 
   @override
   void part2() {
-    final pattern = RegExp(r"(do\(\)|don't\(\)|mul\(\d+,\d+\))");
-    final mulPattern = RegExp(r'mul\((\d+),(\d+)\)');
+    final pattern = RegExp(r"(do|don't|mul)\(([\d,]*)\)");
     num sum = 0;
     bool active = true;
 
     for (final match in pattern.allMatches(content)) {
-      final [command] = match.groups([1]);
+      final [command, args] = match.groups([1, 2]);
 
       if (command!.startsWith("don't")) {
         active = false;
       } else if (command.startsWith("do")) {
         active = true;
       } else if (active) {
-        sum += mulPattern
-            .firstMatch(command)!
-            .groups([1, 2]).fold(1, (agg, val) => agg * int.parse(val!));
+        sum += args!.split(',').fold(1, (agg, val) => agg * int.parse(val));
       }
     }
 
