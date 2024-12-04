@@ -8,8 +8,8 @@
       "name": "Dart & Flutter",
       "request": "launch",
       "type": "dart",
-      "program": "bin/aoc2015.dart",
-      "args": ["day19", "input"]
+      "program": "aoc2024.dart",
+      "args": ["day04", "example"]
     }
   ]
 }
