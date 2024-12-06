@@ -1,10 +1,10 @@
 final class Vector {
-  final int x;
-  final int y;
-  final int vx;
-  final int vy;
+  final num x;
+  final num y;
+  final num vx;
+  final num vy;
 
-  Vector({required (int, int) pos, required (int, int) dir})
+  Vector({required (num, num) pos, required (num, num) dir})
       : x = pos.$1,
         y = pos.$2,
         vx = dir.$1,
@@ -14,15 +14,15 @@ final class Vector {
     return Vector(pos: (x + steps * vx, y + steps * vy), dir: (vx, vy));
   }
 
-  Vector changeDir((int, int) newDir) {
+  Vector changeDir((num, num) newDir) {
     return Vector(pos: pos, dir: newDir);
   }
 
-  (int, int) get pos {
+  (num, num) get pos {
     return (x, y);
   }
 
-  (int, int) get dir {
+  (num, num) get dir {
     return (vx, vy);
   }
 

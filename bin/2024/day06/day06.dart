@@ -34,7 +34,7 @@ final class Y2024Day06 extends Runnable {
   void part1() {
     Vector vect = Vector(pos: start, dir: dirs[0]);
     int idir = 0;
-    final Set<(int, int)> walked = {start};
+    final Set<(num, num)> walked = {start};
 
     while (true) {
       final next = vect.advance();
@@ -58,8 +58,8 @@ final class Y2024Day06 extends Runnable {
   void part2() {
     Vector vect = Vector(pos: start, dir: dirs[0]);
     int idir = 0;
-    final Set<(int, int)> addableBlocks = {};
-    final Set<(int, int)> walked = {vect.pos};
+    final Set<(num, num)> addableBlocks = {};
+    final Set<(num, num)> walked = {vect.pos};
 
     while (true) {
       final next = vect.advance();
@@ -88,8 +88,8 @@ final class Y2024Day06 extends Runnable {
   * 
   * Returns the position of the addable block if one can be added
   */
-  (int, int)? _canLoop(Vector vect, final Set<(int, int)> walked) {
-    final (int, int) addedBlock = vect.advance().pos;
+  (num, num)? _canLoop(Vector vect, final Set<(num, num)> walked) {
+    final (num, num) addedBlock = vect.advance().pos;
     final Set<Vector> tested = {};
     int idir = (dirs.indexWhere((dir) => dir == vect.dir) + 1) % dirs.length;
 
