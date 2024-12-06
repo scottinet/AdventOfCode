@@ -2,8 +2,10 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:advent_of_code/runnable.dart';
+import 'package:advent_of_code/vector.dart';
 
-class Y2024Day06 extends Runnable {
+final class Y2024Day06 extends Runnable {
+  static const dirs = [(0, -1), (1, 0), (0, 1), (-1, 0)];
   Map<(int, int), String> map = {};
   (int, int) start = (-1, -1);
 
@@ -30,24 +32,22 @@ class Y2024Day06 extends Runnable {
 
   @override
   void part1() {
-    final dirs = [(0, -1), (1, 0), (0, 1), (-1, 0)];
-    (int, int) pos = start;
-    (int, int) vect = dirs[0];
-    int dirIndex = 0;
-    Set<(int, int)> walked = {start};
+    Vector vect = Vector(pos: start, dir: dirs[0]);
+    int idir = 0;
+    final Set<(int, int)> walked = {start};
 
     while (true) {
-      final next = (pos.$1 + vect.$1, pos.$2 + vect.$2);
-      var value = map[next];
+      final next = vect.advance();
+      var value = map[next.pos];
 
       if (value == null) {
         break;
       } else if (value == '#') {
-        dirIndex = (dirIndex + 1) % dirs.length;
-        vect = dirs[dirIndex];
+        idir = (idir + 1) % dirs.length;
+        vect = vect.changeDir(dirs[idir]);
       } else {
-        walked.add(next);
-        pos = next;
+        walked.add(next.pos);
+        vect = next;
       }
     }
 
@@ -55,5 +55,71 @@ class Y2024Day06 extends Runnable {
   }
 
   @override
-  void part2() {}
+  void part2() {
+    Vector vect = Vector(pos: start, dir: dirs[0]);
+    int idir = 0;
+    final Set<(int, int)> addableBlocks = {};
+    final Set<(int, int)> walked = {vect.pos};
+
+    while (true) {
+      final next = vect.advance();
+      var value = map[next.pos];
+
+      if (value == null) {
+        break;
+      } else if (value == '#') {
+        idir = (idir + 1) % dirs.length;
+        vect = vect.changeDir(dirs[idir]);
+      } else {
+        walked.add(next.pos);
+        vect = next;
+      }
+
+      final possibleBlock = _canLoop(vect, walked);
+
+      if (possibleBlock != null) addableBlocks.add(possibleBlock);
+    }
+
+    print("Addable blocks: ${addableBlocks.length}");
+  }
+
+  /*
+  * Walk until exit or until a position+vector has already been walked
+  * 
+  * Returns the position of the addable block if one can be added
+  */
+  (int, int)? _canLoop(Vector vect, final Set<(int, int)> walked) {
+    final (int, int) addedBlock = vect.advance().pos;
+    final Set<Vector> tested = {};
+    int idir = (dirs.indexWhere((dir) => dir == vect.dir) + 1) % dirs.length;
+
+    if (map[addedBlock] == null ||
+        map[addedBlock] == '#' ||
+        walked.contains(addedBlock)) {
+      return null;
+    }
+
+    vect = vect.changeDir(dirs[idir]);
+    tested.add(vect);
+
+    while (true) {
+      final next = vect.advance();
+      final value = map[next.pos];
+
+      if (value == null) {
+        break;
+      } else if (tested.contains(next)) {
+        return addedBlock;
+      } else if (value == '#' || next.pos == addedBlock) {
+        idir = (idir + 1) % dirs.length;
+        vect = vect.changeDir(dirs[idir]);
+      } else {
+        vect = next;
+      }
+
+      tested.add(next);
+    }
+
+    return null;
+  }
 }
