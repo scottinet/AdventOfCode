@@ -55,20 +55,17 @@ final class Y2024Day07 extends Runnable {
     int calibratedSum = 0;
 
     for (final equation in equations) {
-      final amalgams = Amalgams(equation.numbers.length - 1, ['+', '*', '||']);
+      final amalgams = Amalgams(equation.numbers.length - 1, ['*', '+', '||']);
 
       for (final operators in amalgams()) {
         int result = equation.numbers[0];
 
         for (int i = 1; i < equation.numbers.length; i++) {
-          if (operators[i - 1] == '+') {
-            result += equation.numbers[i];
-          } else if (operators[i - 1] == '*') {
-            result *= equation.numbers[i];
-          } else {
-            result =
-                int.parse(result.toString() + equation.numbers[i].toString());
-          }
+          result = operators[i - 1] == '+'
+              ? result + equation.numbers[i]
+              : operators[i - 1] == '*'
+                  ? result * equation.numbers[i]
+                  : int.parse('$result${equation.numbers[i]}');
         }
 
         if (result == equation.total) {
