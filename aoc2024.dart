@@ -44,12 +44,14 @@ void main(List<String> args) async {
   var stopwatch = Stopwatch()..start();
   await runnable.part1();
   stopwatch.stop();
-  print('(part 1 elapsed time: ${stopwatch.elapsed.inMilliseconds}ms)');
+  print(
+      '(part 1 elapsed time: ${stopwatch.elapsed.inMilliseconds}.${stopwatch.elapsed.inMicroseconds}ms)');
 
   print('-'.padRight(40, '-'));
 
   stopwatch = Stopwatch()..start();
   await runnable.part2();
   stopwatch.stop();
-  print('(part2 elapsed time: ${stopwatch.elapsed.inMilliseconds}ms)');
+  print(
+      '(part2 elapsed time: ${stopwatch.elapsed.inMilliseconds}.${stopwatch.elapsed.inMicroseconds}ms)');
 }
