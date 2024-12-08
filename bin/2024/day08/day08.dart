@@ -28,6 +28,10 @@ final class Y2024Day08 extends Runnable {
     }
   }
 
+  bool _isWithinLimits(Point p) {
+    return p.x >= 0 && p.x < limit.x && p.y >= 0 && p.y < limit.y;
+  }
+
   @override
   void part1() {
     Set<Point> antinodes = {};
@@ -46,9 +50,7 @@ final class Y2024Day08 extends Runnable {
       }
     }
 
-    final count = antinodes
-        .where((p) => p.x >= 0 && p.x < limit.x && p.y >= 0 && p.y < limit.y)
-        .length;
+    final count = antinodes.where(_isWithinLimits).length;
     print("There are $count antinodes");
   }
 
@@ -65,15 +67,13 @@ final class Y2024Day08 extends Runnable {
         do {
           antinodes.add(next);
           next = (x: next.x + diff.x, y: next.y + diff.y);
-        } while (
-            next.x >= 0 && next.x < limit.x && next.y >= 0 && next.y < limit.y);
+        } while (_isWithinLimits(next));
 
         next = antA;
         do {
           antinodes.add(next);
           next = (x: next.x - diff.x, y: next.y - diff.y);
-        } while (
-            next.x >= 0 && next.x < limit.x && next.y >= 0 && next.y < limit.y);
+        } while (_isWithinLimits(next));
       }
     }
 
