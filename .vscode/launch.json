@@ -9,7 +9,7 @@
       "request": "launch",
       "type": "dart",
       "program": "aoc2024.dart",
-      "args": ["day07", "example"]
+      "args": ["day09", "example"]
     }
   ]
 }
