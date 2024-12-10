@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:advent_of_code/graphs/travelling_salesman.dart';
 import 'package:advent_of_code/runnable.dart';
 
 typedef Block = ({int id, int len});
