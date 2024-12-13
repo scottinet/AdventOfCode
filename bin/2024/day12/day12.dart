@@ -81,5 +81,49 @@ final class Y2024Day12 extends Runnable {
   }
 
   @override
-  void part2() {}
+  void part2() {
+    int price = 0;
+
+    for (final r in regions) {
+      Map<String, List<int>> sides = {};
+
+      for (final p in r.points) {
+        final missing = GridPoint(
+                x: p.x, y: p.y, value: p.value, pattern: NeighboursPattern.plus)
+            .neighbours
+            .where((n) =>
+                r.points
+                    .firstWhereOrNull((rp) => rp.x == n.$1 && rp.y == n.$2) ==
+                null)
+            .toList();
+
+        for (final m in missing) {
+          if (m.$1 != p.x) {
+            final id = '${m.$1 < p.x ? 'W' : 'E'}${m.$1}';
+            sides[id] ??= [];
+            sides[id]!.add(p.y);
+          } else {
+            final id = '${m.$2 < p.y ? 'N' : 'S'}${m.$2}';
+            sides[id] ??= [];
+            sides[id]!.add(p.x);
+          }
+        }
+      }
+
+      int sidesCount = 0;
+
+      for (final seq in sides.values) {
+        seq.sort();
+        sidesCount++;
+
+        for (int i = 1; i < seq.length; i++) {
+          if (seq[i] != seq[i - 1] + 1) sidesCount++;
+        }
+      }
+
+      price += r.points.length * sidesCount;
+    }
+
+    print("Total price: $price");
+  }
 }
