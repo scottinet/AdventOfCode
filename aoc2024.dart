@@ -13,6 +13,7 @@ import 'bin/2024/day08/day08.dart';
 import 'bin/2024/day09/day09.dart';
 import 'bin/2024/day10/day10.dart';
 import 'bin/2024/day11/day11.dart';
+import 'bin/2024/day12/day12.dart';
 
 Map<String, Runnable> dayRunners = {
   'day01': Y2024Day01(),
@@ -26,6 +27,7 @@ Map<String, Runnable> dayRunners = {
   'day09': Y2024Day09(),
   'day10': Y2024Day10(),
   'day11': Y2024Day11(),
+  'day12': Y2024Day12(),
 };
 
 void main(List<String> args) async {
@@ -57,5 +59,5 @@ void main(List<String> args) async {
   stopwatch = Stopwatch()..start();
   await runnable.part2();
   stopwatch.stop();
-  print('(part2 elapsed time: ${stopwatch.elapsed.inMicroseconds / 1000}ms)');
+  print('(part 2 elapsed time: ${stopwatch.elapsed.inMicroseconds / 1000}ms)');
 }
