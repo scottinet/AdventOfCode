@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:advent_of_code/runnable.dart';
+import 'package:collection/collection.dart';
 import 'bin/2024/day01/day01.dart';
 import 'bin/2024/day02/day02.dart';
 import 'bin/2024/day03/day03.dart';
@@ -15,6 +16,7 @@ import 'bin/2024/day10/day10.dart';
 import 'bin/2024/day11/day11.dart';
 import 'bin/2024/day12/day12.dart';
 import 'bin/2024/day13/day13.dart';
+import 'bin/2024/day14/day14.dart';
 
 Map<String, Runnable> dayRunners = {
   'day01': Y2024Day01(),
@@ -30,6 +32,7 @@ Map<String, Runnable> dayRunners = {
   'day11': Y2024Day11(),
   'day12': Y2024Day12(),
   'day13': Y2024Day13(),
+  'day14': Y2024Day14(),
 };
 
 void main(List<String> args) async {
@@ -49,7 +52,7 @@ void main(List<String> args) async {
       .openRead()
       .transform(utf8.decoder);
 
-  await runnable.init(input);
+  await runnable.init(input, args: args.slice(2));
 
   var stopwatch = Stopwatch()..start();
   await runnable.part1();
