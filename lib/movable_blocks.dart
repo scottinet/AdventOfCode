@@ -1,9 +1,8 @@
-// Describes a block of any shape
-// Block's point should be contiguous
-//
 import 'package:advent_of_code/vector.dart';
 import 'package:collection/collection.dart';
 
+// Describes a block of any shape
+// Block's point should be contiguous
 final class MovableBlock<T> {
   final bool movable;
   final List<(num x, num y)> points;
