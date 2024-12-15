@@ -1,13 +1,14 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:advent_of_code/movable_blocks.dart';
 import 'package:advent_of_code/runnable.dart';
 import 'package:advent_of_code/vector.dart';
 
-typedef Block = ({(num, num) pos, String kind});
+typedef B = ({(num, num) pos, String kind});
 
 final class Y2024Day15 extends Runnable {
-  final Map<(int, int), String> _map = {};
+  final _blocks = MovableBlocksList();
   final List<(int, int)> _directions = [];
   late (num, num) _robot;
   int xmax = -1, ymax = -1;
@@ -30,7 +31,10 @@ final class Y2024Day15 extends Runnable {
             continue;
           case '#':
           case 'O':
-            _map[(x, y)] = lines[y][x];
+            _blocks.add(MovableBlock(
+                points: [(x, y)],
+                movable: lines[y][x] == 'O',
+                value: lines[y][x]));
             break;
           case '@':
             _robot = (x, y);
@@ -54,108 +58,47 @@ final class Y2024Day15 extends Runnable {
     }
   }
 
-  @override
-  void part1() {
-    final map = Map<(int, int), String>.from(_map);
-    var robot = _robot;
+  num getGpsCoords(MovableBlocksList blocks) {
+    return blocks.blocks.fold(
+        0,
+        (agg, b) =>
+            agg + (b.movable ? b.points[0].$1 + 100 * b.points[0].$2 : 0));
+  }
 
+  void applyDirections(MovableBlocksList blocks, (num, num) robot) {
     for (final dir in _directions) {
-      var vect = Vector(pos: robot, dir: dir);
-      int moves = 1;
-      for (; map[vect.advance(moves).pos] == 'O'; moves++) {}
+      final vect = Vector(pos: robot, dir: dir);
+      final block = blocks.getBlockAt(vect.advance().pos);
 
-      if (map[vect.advance(moves).pos] == '#') continue;
-
-      robot = vect.advance(1).pos;
-
-      for (int i = moves; i > 1; i--) {
-        final spot = vect.advance(i - 1);
-        map.remove(spot.pos);
-        map[vect.advance(i).pos as (int, int)] = 'O';
+      if (block == null) {
+        robot = vect.advance().pos;
+      } else if (blocks.move(block: block, dir: dir)) {
+        robot = vect.advance().pos;
       }
     }
-
-    print("Sum of GPS coordinates: ${getGpsCoords(map)}");
   }
 
-  int getGpsCoords(Map<(int, int), String> map) {
-    return map.entries.fold(
-        0,
-        (agg, spot) =>
-            agg + (spot.value == 'O' ? spot.key.$1 + 100 * spot.key.$2 : 0));
-  }
+  @override
+  void part1() {
+    final blocks = _blocks.copy();
+    applyDirections(blocks, _robot);
 
-  Block? getBlockAt(Map<(int, int), String> map, (num, num) pos) {
-    Block? block;
-
-    if (map.containsKey(pos)) {
-      block = (pos: pos, kind: map[pos]!);
-    } else if (map[(pos.$1 - 1, pos.$2)] == 'O') {
-      block = (pos: (pos.$1 - 1, pos.$2), kind: 'O');
-    }
-
-    return block;
-  }
-
-  bool push(
-      {required Map<(int, int), String> map,
-      required Block block,
-      required (num, num) dir,
-      required bool doIt}) {
-    if (block.kind == '#') return false;
-
-    final wide = block.kind == 'O' ? 2 : 1;
-    final Set<Block> next = {};
-
-    for (int i = 0; i < wide; i++) {
-      final vect = Vector(pos: (block.pos.$1 + i, block.pos.$2), dir: dir);
-      final b = getBlockAt(map, vect.advance().pos);
-
-      if (b != null && b.pos != block.pos) next.add(b);
-    }
-
-    final canPush = next.isEmpty ||
-        next.toList().fold(
-            true,
-            (agg, val) =>
-                agg && push(map: map, block: val, dir: dir, doIt: doIt));
-
-    if (!canPush) return false;
-
-    if (doIt && block.kind == 'O') {
-      map.remove(block.pos);
-      map[Vector(pos: block.pos, dir: dir).advance().pos as (int, int)] =
-          block.kind;
-    }
-
-    return true;
+    print("Sum of GPS coordinates: ${getGpsCoords(blocks)}");
   }
 
   @override
   void part2() {
-    var robot = (_robot.$1 * 2, _robot.$2);
-    final Map<(int, int), String> map = {};
+    final blocks = MovableBlocksList();
 
-    for (final entry in _map.entries) {
-      map[(entry.key.$1 * 2, entry.key.$2)] = entry.value;
-
-      if (entry.value == '#') {
-        map[(entry.key.$1 * 2 + 1, entry.key.$2)] = entry.value;
-      }
+    for (final block in _blocks.blocks) {
+      blocks.add(MovableBlock(points: [
+        (block.points[0].$1 * 2, block.points[0].$2),
+        (block.points[0].$1 * 2 + 1, block.points[0].$2)
+      ], movable: block.movable, value: block.value));
     }
 
-    for (final dir in _directions) {
-      final vect = Vector(pos: robot, dir: dir);
-      final block = getBlockAt(map, vect.advance().pos);
+    applyDirections(blocks, (_robot.$1 * 2, _robot.$2));
 
-      if (block == null) {
-        robot = vect.advance().pos;
-      } else if (push(map: map, block: block, dir: dir, doIt: false)) {
-        push(map: map, block: block, dir: dir, doIt: true);
-        robot = vect.advance(1).pos;
-      }
-    }
-
-    print("Sum of GPS coordinates: ${getGpsCoords(map)}");
+    print("Sum of GPS coordinates: ${getGpsCoords(blocks)}");
   }
 }
