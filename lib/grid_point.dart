@@ -55,6 +55,10 @@ class GridPoint<T> {
     return neighbours.contains((p.x, p.y));
   }
 
+  (num, num) get pos {
+    return (x, y);
+  }
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||

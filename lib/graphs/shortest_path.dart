@@ -18,7 +18,7 @@ import 'weighted_graph_node.dart';
 ) findShortestPath(WeightedGraphNode start, WeightedGraphNode end) {
   final distances = {start: 0.0};
   final queue = PriorityQueue<WeightedGraphNode>();
-  final prev = <WeightedGraphNode, WeightedGraphNode>{};
+  final prev = <WeightedGraphNode, WeightedGraphNode>{}; 
 
   queue.add(start, 0);
 
