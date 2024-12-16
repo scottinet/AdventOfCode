@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:advent_of_code/graphs/weighted_graph_node.dart';
 import 'package:advent_of_code/grid_point.dart';
-import 'package:advent_of_code/prority_queue.dart';
+import 'package:advent_of_code/prority_queue.dart' as pq;
 import 'package:advent_of_code/runnable.dart';
 import 'package:advent_of_code/vector.dart';
+import 'package:collection/collection.dart';
 
 final class Y2024Day16 extends Runnable {
   final Map<(int, int), GridPoint> _points = {};
@@ -44,13 +44,14 @@ final class Y2024Day16 extends Runnable {
   }
 
   /// custom-copy of shortest_path.dart
-  /// dijsktra pathfinding algorithm
-  (Map<Vector, double> distances, Map<Vector, Vector> paths)
+  /// dijsktra pathfinding algorithm adapted to Vectors to calculate weights
+  /// depending on the current direction the reindeer is facing.
+  (Map<Vector, double> distances, Map<Vector, List<Vector>> paths)
       findShortestPath() {
     final start = Vector(pos: _start.pos, dir: (1, 0));
     final distances = {start: 0.0};
-    final queue = PriorityQueue<Vector>();
-    final prev = <Vector, Vector>{};
+    final queue = pq.PriorityQueue<Vector>();
+    final prev = <Vector, List<Vector>>{};
 
     queue.add(Vector(pos: _start.pos, dir: (1, 0)), 0);
 
@@ -69,14 +70,18 @@ final class Y2024Day16 extends Runnable {
         final seen = distances[vvect] != null;
         final vdist = distances[uvect]! + (vvect.dir == uvect.dir ? 1 : 1001);
 
-        if (vdist < (distances[vvect] ?? double.infinity)) {
-          distances[vvect] = vdist;
-          prev[vvect] = uvect;
+        if (vdist <= (distances[vvect] ?? double.infinity)) {
+          if (vdist < (distances[vvect] ?? double.infinity)) {
+            distances[vvect] = vdist;
+            prev[vvect] = [uvect];
 
-          if (seen) {
-            queue.decreasePriority(vvect, vdist);
+            if (seen) {
+              queue.decreasePriority(vvect, vdist);
+            } else {
+              queue.add(vvect, vdist);
+            }
           } else {
-            queue.add(vvect, vdist);
+            prev[vvect] = (prev[vvect] ?? [])..add(uvect);
           }
         }
       }
@@ -93,5 +98,23 @@ final class Y2024Day16 extends Runnable {
   }
 
   @override
-  void part2() {}
+  void part2() {
+    final result = findShortestPath();
+    List<Vector> tasks = [...result.$2.keys.where((k) => k.pos == _end.pos)];
+    Set<(num, num)> points = {_end.pos};
+
+    while (tasks.isNotEmpty) {
+      final task = tasks.removeAt(0);
+
+      final prev = result.$2.entries
+          .where((e) => e.key == task)
+          .map((e) => e.value)
+          .flattened;
+      points.addAll(prev.map((p) => p.pos));
+
+      tasks.addAll(prev);
+    }
+
+    print("Count: ${points.length}");
+  }
 }
