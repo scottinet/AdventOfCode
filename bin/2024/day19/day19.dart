@@ -17,7 +17,7 @@ final class Y2024Day19 extends Runnable {
     _desired.addAll(lines.slice(2));
   }
 
-  int isDesignPossible(String design, Map<String, int> cache) {
+  int countPossibleDesigns(String design, Map<String, int> cache) {
     if (design.isEmpty) return 1;
     if (cache.containsKey(design)) return cache[design]!;
 
@@ -25,7 +25,7 @@ final class Y2024Day19 extends Runnable {
     final result = candidates.isEmpty
         ? 0
         : candidates
-            .map((c) => isDesignPossible(design.substring(c.length), cache))
+            .map((c) => countPossibleDesigns(design.substring(c.length), cache))
             .reduce((agg, val) => agg + val);
 
     cache[design] = result;
@@ -36,7 +36,7 @@ final class Y2024Day19 extends Runnable {
   void part1() {
     final Map<String, int> cache = {};
     final possibles = _desired
-        .map((d) => isDesignPossible(d, cache))
+        .map((d) => countPossibleDesigns(d, cache))
         .where((p) => p > 0)
         .length;
 
@@ -47,7 +47,7 @@ final class Y2024Day19 extends Runnable {
   void part2() {
     final Map<String, int> cache = {};
     final possibles = _desired
-        .map((d) => isDesignPossible(d, cache))
+        .map((d) => countPossibleDesigns(d, cache))
         .reduce((agg, val) => agg + val);
 
     print("There are $possibles combinations of possibles designs");
