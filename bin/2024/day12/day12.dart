@@ -34,7 +34,9 @@ final class Y2024Day12 extends Runnable {
         final List<int> indexes = [];
         for (int i = 0; i < regions.length; i++) {
           if (regions[i].name == point.value &&
-              regions[i].points.firstWhereOrNull((p) => p.isNeighbour(point)) !=
+              regions[i]
+                      .points
+                      .firstWhereOrNull((p) => p.isNeighbour(point.pos)) !=
                   null) {
             indexes.add(i);
           }
