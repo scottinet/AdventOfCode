@@ -34,7 +34,7 @@ class GridPoint<T> {
         for (int nx = x - 1; nx <= x + 1; nx++) {
           if (nx == x && ny == y) continue;
           if (pattern == NeighboursPattern.plus && (nx - x) * (ny - y) != 0 ||
-              pattern == NeighboursPattern.cross && (nx - x * ny - y) == 0) {
+              pattern == NeighboursPattern.cross && (nx - x) * (ny - y) == 0) {
             continue;
           }
 
@@ -72,6 +72,6 @@ class GridPoint<T> {
 
   @override
   String toString() {
-    return '($x, $y)';
+    return '($x, $y): $value';
   }
 }
