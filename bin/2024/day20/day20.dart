@@ -1,106 +1,140 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:advent_of_code/grid_point.dart';
 import 'package:advent_of_code/runnable.dart';
-import 'package:advent_of_code/vector.dart';
+import 'package:collection/collection.dart';
 
 final class Y2024Day20 extends Runnable {
   late int _xmax, _ymax;
-  final Map<(int, int), GridPoint> _points = {};
-  final List<GridPoint> _path = [];
+  final Map<(int, int), GridPoint<int>> _points = {};
 
   @override
   Future<void> init(Stream<String> input,
       {List<String> args = const []}) async {
     final lines = await input.transform(LineSplitter()).toList();
+    late GridPoint<int> start, end;
+
     _ymax = lines.length;
     _xmax = lines[0].length;
 
-    GridPoint? start, end;
-
     for (int y = 0; y < _ymax; y++) {
       for (int x = 0; x < _xmax; x++) {
-        final char = lines[y][x];
+        if (lines[y][x] == '#') continue;
 
-        if (char == '#') continue;
-
-        final p = GridPoint(
-            value: char,
-            x: x,
-            y: y,
-            xmin: 0,
-            ymin: 0,
-            xmax: _xmax,
-            ymax: _ymax,
-            pattern: NeighboursPattern.plus);
+        final p = toGridPoint((x, y), 0);
 
         _points[(x, y)] = p;
 
-        if (char == 'S') {
+        if (lines[y][x] == 'S') {
           start = p;
-        } else if (char == 'E') {
+        } else if (lines[y][x] == 'E') {
           end = p;
         }
       }
     }
 
-    _path.add(start!);
-    Set<(num, num)> visited = {start.pos};
+    // optimization: store in the point value their path index
+    GridPoint<int> prev = start;
+    GridPoint<int> point = start;
+    int steps = 0;
 
-    for (var p = start; p != end;) {
-      for (final n in p.neighbours) {
-        if (_points.containsKey(n) && !visited.contains(n)) {
-          p = _points[n]!;
-          _path.add(p);
-          visited.add(n);
-          continue;
-        }
-      }
-    }
-  }
+    while (point != end) {
+      steps++;
 
-  List<(GridPoint, int)> pierce(GridPoint p, int depth) {
-    List<(GridPoint, int)> neighbours = [];
-    List<(int, int)> piercable =
-        p.neighbours.where((p) => !_points.containsKey(p)).toList();
-
-    for (final pierced in piercable) {
-      var vect =
-          Vector(pos: pierced, dir: (pierced.$1 - p.x, pierced.$2 - p.y));
-
-      for (int i = 0; i < depth; i++) {
-        vect = vect.advance();
-        if (_points.containsKey(vect.pos)) {
-          neighbours.add((_points[vect.pos]!, i + 2));
+      for (final n in point.neighbours) {
+        if (n != prev.pos && _points.containsKey(n)) {
+          prev = point;
+          _points[n] = _points[n]!.copyWith(value: steps);
+          point = _points[n]!;
           break;
         }
       }
     }
-
-    return neighbours;
   }
 
-  @override
-  void part1() {
-    int cheats = 0;
+  GridPoint<int> toGridPoint((int, int) pos, int value) {
+    return GridPoint<int>(
+        value: value,
+        x: pos.$1,
+        y: pos.$2,
+        xmin: 0,
+        ymin: 0,
+        xmax: _xmax,
+        ymax: _ymax,
+        pattern: NeighboursPattern.plus);
+  }
 
-    for (final p in _path) {
-      final idx1 = _path.indexOf(p);
-      final holes = pierce(p, 2);
+  Map<GridPoint<int>, int> pierce(GridPoint start, int depth) {
+    Map<GridPoint<int>, int> exitPoints = {};
+    Set<GridPoint<int>> piercable =
+        Set.from(start.neighbours.map((p) => toGridPoint(p, 1)));
 
-      for (final h in holes) {
-        final saved = _path.indexOf(h.$1) - idx1 - h.$2;
+    for (int i = 1; i < depth; i++) {
+      final tasks = piercable.toList();
 
-        if (saved >= 100) {
-          cheats++;
+      for (final p in tasks) {
+        for (final pn in p.neighbours.map((n) => toGridPoint(n, i + 1))) {
+          if (!piercable.contains(pn)) {
+            piercable.add(pn);
+          }
         }
       }
     }
 
-    print("There are $cheats cheats");
+    for (final pierced in piercable) {
+      for (final pn in pierced.neighbours) {
+        final point = _points[pn];
+        if (point == null || point.value <= start.value) continue;
+
+        final saves = (point.value - start.value) - (pierced.value + 1);
+
+        if (saves > 0) {
+          final prev = exitPoints[point];
+          exitPoints[point] =
+              prev != null ? max(prev, saves.toInt()) : saves.toInt();
+        }
+      }
+    }
+
+    return exitPoints;
   }
 
   @override
-  void part2() {}
+  void part1() {
+    const int threshold = 100;
+    int cheats = 0;
+
+    for (final p in _points.values) {
+      final holes = pierce(p, 1);
+      cheats += holes.values.where((v) => v >= threshold).length;
+    }
+
+    print("There are $cheats cheats with a gain over $threshold");
+  }
+
+  @override
+  void part2() {
+    const int threshold = 100;
+    Map<int, int> cheats = {};
+
+    for (final p in _points.values) {
+      final holes = pierce(p, 19);
+
+      for (final h in holes.values.where((v) => v >= threshold)) {
+        cheats[h] = (cheats[h] ?? 0) + 1;
+      }
+    }
+
+    int total = 0;
+
+    for (final cheat in cheats.entries.sorted((a, b) => a.key - b.key)) {
+      // print(
+      //     "There are ${cheat.value} cheats that save ${cheat.key} picoseconds");
+      total += cheat.value;
+    }
+
+    print("\n=> There are $total cheats in total");
+  }
 }

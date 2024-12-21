@@ -10,6 +10,7 @@ class GridPoint<T> {
   final int y;
   final T value;
   final List<(int, int)> neighbours = [];
+  final NeighboursPattern pattern;
 
   GridPoint(
       {required this.x,
@@ -20,7 +21,7 @@ class GridPoint<T> {
       int? ymin,
       int? ymax,
       List<(int, int)>? neighbours,
-      NeighboursPattern pattern = NeighboursPattern.all}) {
+      this.pattern = NeighboursPattern.all}) {
     if (neighbours != null &&
         (xmin != null || xmax != null || ymin != null || ymax != null)) {
       throw Exception(
@@ -48,11 +49,30 @@ class GridPoint<T> {
   }
 
   GridPoint<T> copy() {
-    return GridPoint<T>(x: x, y: y, value: value, neighbours: neighbours);
+    return GridPoint<T>(
+        x: x, y: y, value: value, neighbours: neighbours, pattern: pattern);
   }
 
-  bool isNeighbour(GridPoint p) {
-    return neighbours.contains((p.x, p.y));
+  GridPoint<T> copyWith(
+      {int? x,
+      int? y,
+      T? value,
+      int? xmin,
+      int? xmax,
+      int? ymin,
+      int? ymax,
+      List<(int, int)>? neighbours,
+      NeighboursPattern? pattern}) {
+    return GridPoint<T>(
+        x: x ?? this.x,
+        y: y ?? this.y,
+        value: value ?? this.value,
+        neighbours: neighbours ?? this.neighbours,
+        pattern: pattern ?? this.pattern);
+  }
+
+  bool isNeighbour((num, num) p) {
+    return neighbours.contains((p.$1, p.$2));
   }
 
   (num, num) get pos {
