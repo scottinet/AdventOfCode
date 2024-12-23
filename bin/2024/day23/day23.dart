@@ -4,8 +4,10 @@ import 'dart:convert';
 import 'package:advent_of_code/graphs/weighted_graph_node.dart';
 import 'package:advent_of_code/runnable.dart';
 
+typedef Node = WeightedGraphNode<String>;
+
 final class Y2024Day23 extends Runnable {
-  final Map<String, WeightedGraphNode<String>> _computers = {};
+  final Map<String, Node> _computers = {};
 
   @override
   Future<void> init(Stream<String> input,
@@ -13,8 +15,8 @@ final class Y2024Day23 extends Runnable {
     final lines = await input.transform(LineSplitter()).toList();
 
     for (final [a, b] in lines.map((l) => l.split('-'))) {
-      final nodeA = _computers[a] ?? WeightedGraphNode<String>(data: a);
-      final nodeB = _computers[b] ?? WeightedGraphNode<String>(data: b);
+      final nodeA = _computers[a] ?? Node(data: a);
+      final nodeB = _computers[b] ?? Node(data: b);
 
       nodeA.linkTo(nodeB, 1);
 
@@ -42,6 +44,34 @@ final class Y2024Day23 extends Runnable {
     print("There are ${setOf3.length} LANs");
   }
 
+  List<String> visit(Node start, Set<Node> visited) {
+    final children = start.children.keys.where((c) =>
+        !visited.contains(c) &&
+        visited.every((v) => c.children.containsKey(v)));
+    visited.add(start);
+
+    if (children.isEmpty) return [start.data];
+
+    List<String> longest = [];
+
+    for (final child in children) {
+      final result = visit(child, visited);
+      longest = longest.length > result.length ? longest : result;
+    }
+
+    return longest..add(start.data);
+  }
+
   @override
-  void part2() {}
+  void part2() {
+    List<String> largerSet = [];
+
+    for (final computer in _computers.values) {
+      final result = visit(computer, {});
+      largerSet = largerSet.length > result.length ? largerSet : result
+        ..sort();
+    }
+
+    print("Password: ${largerSet.join(",")}");
+  }
 }
