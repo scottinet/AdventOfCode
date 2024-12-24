@@ -5,7 +5,7 @@ import 'package:advent_of_code/runnable.dart';
 import 'package:collection/collection.dart';
 
 final class Gate {
-  final String name;
+  String name;
   int? value;
   Gate? cond1, cond2;
   String? op;
@@ -31,6 +31,28 @@ final class Gate {
         return cond1!.getValue() | cond2!.getValue();
       case "XOR":
         return cond1!.getValue() ^ cond2!.getValue();
+      default:
+        throw Exception("Unknown operator $op");
+    }
+  }
+
+  bool isResultOf(Gate cond1, String op, Gate cond2) {
+    return op == this.op &&
+        ((cond1 == this.cond1 && cond2 == this.cond2) ||
+            (cond1 == this.cond2 && cond2 == this.cond1));
+  }
+
+  @override
+  String toString() {
+    if (value != null) return "$name: $value";
+
+    switch (op) {
+      case "AND":
+        return "${cond1!.name} AND ${cond2!.name} => $name";
+      case "OR":
+        return "${cond1!.name} OR ${cond2!.name} => $name";
+      case "XOR":
+        return "${cond1!.name} XOR ${cond2!.name} => $name";
       default:
         throw Exception("Unknown operator $op");
     }
@@ -87,6 +109,79 @@ final class Y2024Day24 extends Runnable {
     print(int.parse(values, radix: 2));
   }
 
+  int getMaxDigit() {
+    return int.parse(_gates.keys
+        .where((k) => k.startsWith('x'))
+        .sorted()
+        .reversed
+        .first
+        .replaceAll(RegExp('\\D'), ''));
+  }
+
   @override
-  void part2() {}
+  void part2() {
+    final maxDigit = getMaxDigit();
+    final gates = _gates.values.toList();
+
+    // the input file seems to use the ripple-carry adder, which is a
+    // "simple" succession of full adders
+    // see https://en.wikipedia.org/wiki/Adder_(electronics)#Full_adder
+    // final List<Gate> carries = [];
+    final List<Gate> adders = []; // 1 => maxdigit
+
+    for (int i = 0; i <= maxDigit; i++) {
+      final key = i.toString().padLeft(2, '0');
+
+      final adder = gates.firstWhere(
+          (g) => g.isResultOf(_gates['x$key']!, 'XOR', _gates['y$key']!));
+      adders.add(adder);
+    }
+
+    Gate prevCarry = gates
+        .firstWhere((g) => g.isResultOf(_gates['x00']!, 'AND', _gates['y00']!));
+    List<String> erroneous = [];
+
+    for (int i = 1; i <= maxDigit; i++) {
+      final key = i.toString().padLeft(2, '0');
+      final zGate = _gates["z$key"]!;
+
+      if (!zGate.isResultOf(adders[i], "XOR", prevCarry)) {
+        print("ohnoes: $zGate");
+        print("expected: ${adders[i].name} XOR ${prevCarry.name}");
+
+        // this fix is incomplete, there is one case where it doesn't work... and
+        // the program crash
+        // I fixed the input file manually and added the 2 remaining faulty values
+        // to the result by hand -_-
+        final swap =
+            gates.firstWhere((g) => g.isResultOf(adders[i], "XOR", prevCarry));
+        erroneous.addAll([zGate.name, swap.name]);
+
+        for (final gate in gates) {
+          if (gate.cond1 == zGate) {
+            gate.cond1 = swap;
+          }
+          if (gate.cond2 == zGate) {
+            gate.cond2 = swap;
+          }
+          if (gate.cond1 == swap) {
+            gate.cond1 = zGate;
+          }
+          if (gate.cond2 == swap) {
+            gate.cond2 = zGate;
+          }
+        }
+      }
+
+      Gate ck1 =
+          gates.firstWhere((g) => g.isResultOf(adders[i], 'AND', prevCarry));
+      Gate ck2 = gates.firstWhere(
+          (g) => g.isResultOf(_gates["x$key"]!, "AND", _gates["y$key"]!));
+
+      prevCarry = gates.firstWhere((g) => g.isResultOf(ck1, "OR", ck2));
+    }
+
+    erroneous.sort();
+    print(erroneous.join(','));
+  }
 }
