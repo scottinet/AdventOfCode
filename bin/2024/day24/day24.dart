@@ -127,7 +127,7 @@ final class Y2024Day24 extends Runnable {
     // "simple" succession of full adders
     // see https://en.wikipedia.org/wiki/Adder_(electronics)#Full_adder
     // final List<Gate> carries = [];
-    final List<Gate> adders = []; // 1 => maxdigit
+    final List<Gate> adders = [];
 
     for (int i = 0; i <= maxDigit; i++) {
       final key = i.toString().padLeft(2, '0');
@@ -146,29 +146,31 @@ final class Y2024Day24 extends Runnable {
       final zGate = _gates["z$key"]!;
 
       if (!zGate.isResultOf(adders[i], "XOR", prevCarry)) {
-        print("ohnoes: $zGate");
-        print("expected: ${adders[i].name} XOR ${prevCarry.name}");
+        var swap1 = zGate;
 
-        // this fix is incomplete, there is one case where it doesn't work... and
-        // the program crash
-        // I fixed the input file manually and added the 2 remaining faulty values
-        // to the result by hand -_-
-        final swap =
-            gates.firstWhere((g) => g.isResultOf(adders[i], "XOR", prevCarry));
-        erroneous.addAll([zGate.name, swap.name]);
+        var swap2 = gates
+            .firstWhereOrNull((g) => g.isResultOf(adders[i], "XOR", prevCarry));
+
+        if (swap2 == null) {
+          swap1 = zGate.cond1 == prevCarry ? zGate.cond2! : zGate.cond1!;
+          swap2 = adders[i];
+          adders[i] = swap1;
+        }
+
+        erroneous.addAll([swap1.name, swap2.name]);
 
         for (final gate in gates) {
-          if (gate.cond1 == zGate) {
-            gate.cond1 = swap;
+          if (gate.cond1 == swap1) {
+            gate.cond1 = swap2;
           }
-          if (gate.cond2 == zGate) {
-            gate.cond2 = swap;
+          if (gate.cond2 == swap1) {
+            gate.cond2 = swap2;
           }
-          if (gate.cond1 == swap) {
-            gate.cond1 = zGate;
+          if (gate.cond1 == swap2) {
+            gate.cond1 = swap1;
           }
-          if (gate.cond2 == swap) {
-            gate.cond2 = zGate;
+          if (gate.cond2 == swap2) {
+            gate.cond2 = swap1;
           }
         }
       }
